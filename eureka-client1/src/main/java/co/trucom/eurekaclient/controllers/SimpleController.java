@@ -40,6 +40,21 @@ public class SimpleController {
 		}
 	}
 	
+	@GetMapping("hey")
+	public ResponseEntity<Map<String, String>> helloFromAWS() {
+		String url = "http://ec2-18-119-163-251.us-east-2.compute.amazonaws.com:8080/api/v1/hello";
+		
+		try {
+			@SuppressWarnings("unchecked")
+			Map<String, String> content = restTemplate.getForObject(url, Map.class);
+			
+			return new ResponseEntity<>(content, HttpStatus.OK);
+		} catch(Exception e) {
+			throw new RuntimeException("Couldn't get String from the other client. Error: " 
+					+ e);
+		}
+	}
+	
 	@GetMapping("coldplay") 
 	public ResponseEntity<Map<String, String>> coldplayLyrics() {
 		String apiUrl = "https://api.lyrics.ovh/v1/Coldplay/Adventure of a Lifetime";
