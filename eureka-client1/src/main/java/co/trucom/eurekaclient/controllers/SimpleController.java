@@ -50,7 +50,7 @@ public class SimpleController {
 			
 			return new ResponseEntity<>(content, HttpStatus.OK);
 		} catch(Exception e) {
-			throw new RuntimeException("Couldn't get String from the other client. Error: " 
+			throw new RuntimeException("Couldn't get content map from AWS. Error: " 
 					+ e);
 		}
 	}
@@ -72,8 +72,6 @@ public class SimpleController {
 	
 	private String getBaseUrl() {
 		ServiceInstance serviceInstance = loadBalancer.choose("ANOTHER-CLIENT");
-		
-		System.out.println(serviceInstance.getUri().toString());
 		
 		return serviceInstance.getUri().toString();
 	}
