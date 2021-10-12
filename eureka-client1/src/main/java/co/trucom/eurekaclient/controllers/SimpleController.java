@@ -1,7 +1,10 @@
 package co.trucom.eurekaclient.controllers;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import javax.ws.rs.core.MediaType;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
@@ -69,11 +72,51 @@ public class SimpleController {
 					+ e);
 		}
 	}
-	
+
+	@GetMapping(value = "json", produces = MediaType.APPLICATION_JSON)
+	public Message helloWorld() {
+		return new Message(333L, "Hello, the World!");
+	}
+
+	@GetMapping(value = "jsonlist", produces = MediaType.APPLICATION_JSON)
+	public List<Message> helloWorldList() {
+		return List.of(new Message(333L, "Hello, the World!"),
+				new Message(1L, "Heyyy"),
+				new Message(111L, "Hurrayyy!!!"));
+	}
+
 	private String getBaseUrl() {
 		ServiceInstance serviceInstance = loadBalancer.choose("ANOTHER-CLIENT");
 		
 		return serviceInstance.getUri().toString();
+	}
+
+	private class Message {
+		
+		private Long id;
+		private String content;
+		
+		public Message(Long id, String content) {
+			this.id = id;
+			this.content = content;
+		}
+
+		public Long getId() {
+			return id;
+		}
+
+		public void setId(Long id) {
+			this.id = id;
+		}
+
+		public String getContent() {
+			return content;
+		}
+
+		public void setContent(String content) {
+			this.content = content;
+		}
+
 	}
 
 }
